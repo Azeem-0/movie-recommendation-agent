@@ -13,7 +13,7 @@ const getPromptStartSearch = async () => {
 };
 
 
-async function getUserQuery() {
+const getUserQuery = async () => {
     const { query } = await inquirer.prompt([{
         type: "input",
         name: "query",
@@ -27,7 +27,7 @@ async function getUserQuery() {
     return query;
 }
 
-async function getUserFollowUpAnswer(question) {
+const getUserFollowUpAnswer = async (question) => {
     const { answer } = await inquirer.prompt([{
         type: "input",
         name: "answer",
@@ -38,9 +38,9 @@ async function getUserFollowUpAnswer(question) {
         }
     }]);
     return answer;
-}
+};
 
-async function getRetryPrompt() {
+const getRetryPrompt = async () => {
     const { retry } = await inquirer.prompt([{
         type: "confirm",
         name: "retry",
@@ -48,9 +48,9 @@ async function getRetryPrompt() {
         default: true
     }]).catch(() => ({ retry: false }));
     return retry;
-}
+};
 
-async function getUserSatisfaction() {
+const getUserSatisfaction = async () => {
     const { satisfied } = await inquirer.prompt([{
         type: "confirm",
         name: "satisfied",
@@ -58,5 +58,5 @@ async function getUserSatisfaction() {
         default: false
     }]);
     return satisfied;
-}
+};
 export { getUserFollowUpAnswer, getUserQuery, getPromptStartSearch, getRetryPrompt, getUserSatisfaction };

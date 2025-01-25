@@ -16,8 +16,8 @@ import { handleError, handleMenuError } from '../middlewares/errorHandler.js';
 })();
 
 const mainMenu = async () => {
+    console.log("\nWelcome to the Movie Recommendation Agent!\n");
     try {
-        console.log("\nWelcome to the Movie Recommendation Agent!\n");
         const startSearch = await getPromptStartSearch();
 
         if (!startSearch) {
