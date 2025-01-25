@@ -1,42 +1,35 @@
-const connectDB = require("../config/db");
-const Movie = require("../models/movie");
+import connectDB from "../config/db.js";
+import Movie from "../models/movie.js";
+import getChromaCollection from "../config/vectorDb.js";
+import embedder from "../utils/embedder.js";
+import movies from "./moviesData.js";
 
 const seedMovies = async () => {
     await connectDB();
 
-    const movies = [
-        {
-            title: "Inception",
-            genre: ["Sci-Fi", "Thriller"],
-            year: 2010,
-            rating: 8.8,
-            description: "A mind-bending story about dreams within dreams."
-        },
-        {
-            title: "The Shawshank Redemption",
-            genre: ["Drama"],
-            year: 1994,
-            rating: 9.3,
-            description: "The story of hope and resilience in a prison."
-        },
-        {
-            title: "Toy Story",
-            genre: ["Animation", "Comedy"],
-            year: 1995,
-            rating: 8.3,
-            description: "A heartwarming tale of toys coming to life."
-        }
-    ];
-
     try {
-        await Movie.deleteMany(); // Clear existing data
+        await Movie.deleteMany();
         await Movie.insertMany(movies);
+
+        const collection = await getChromaCollection();
+
+        const ids = movies.map(movie => movie.title);
+        const embeddings = await Promise.all(movies.map(movie => embedder.embedContent(`${movie.title} ${movie.genre.join(", ")} ${movie.description} ${movie.year} ${movie.rating}`)));
+        const documents = movies.map(movie => `${movie.title} ${movie.genre.join(", ")} ${movie.description}`);
+        const metadatas = movies.map(movie => movie);
+
+        await collection.add({
+            ids,
+            embeddings: embeddings.map(e => e.embedding.values),
+            documents,
+            metadatas
+        });
+
         console.log("Movies seeded successfully.");
-        process.exit();
     } catch (error) {
-        console.error(`Error seeding movies: ${error.message}`);
+        console.error(`Error seeding movies: ${error}`);
         process.exit(1);
     }
 };
 
-seedMovies();
+export default seedMovies;
