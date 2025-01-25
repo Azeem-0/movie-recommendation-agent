@@ -23,7 +23,7 @@ const handleMovieSearch = async (collection) => {
                 break;
             }
             userResponse = await getUserFollowUpAnswer(followUpQuestion.question);
-            queryParams = context.join('\n') + followUpQuestion + userResponse;
+            queryParams = followUpQuestion + userResponse + context.join("\n");
         }
 
         const userEmbeddings = await getUserEmbeddings(queryParams);
