@@ -19,8 +19,8 @@ const getUserQuery = async () => {
         name: "query",
         message: "What kind of movie are you looking for?",
         validate: (input) => {
-            if (input.trim() === "") return `Please enter a valid ${name}`;
-            if (input.length > MAX_QUERY_LENGTH) return `${name} too long (max ${MAX_QUERY_LENGTH} characters).`;
+            if (input.trim() === "") return `Please enter a valid query`;
+            if (input.length > MAX_QUERY_LENGTH) return `query too long (max ${MAX_QUERY_LENGTH} characters).`;
             return true;
         }
     }]);

@@ -17,43 +17,48 @@ async function generateFollowUpQuestion(context) {
 
 
 async function fetchFollowUpQuestion(prompt) {
-    const completion = await openai.chat.completions.create({
-        model: "gpt-4o",
-        messages: [
-            { role: "system", content: "You are a helpful assistant generating structured movie recommendation follow-up questions." },
-            { role: "user", content: prompt }
-        ],
-        response_format: {
-            type: "json_schema",
-            json_schema: {
-                name: "followup_question_schema",
-                schema: {
-                    type: "object",
-                    properties: {
-                        state: {
-                            type: "array",
-                            items: { type: "number" },
-                            description: "Interaction state [CONTINUE, SATISFIED, STOP]"
+    try {
+        const completion = await openai.chat.completions.create({
+            model: "gpt-4o",
+            messages: [
+                { role: "system", content: "You are a helpful assistant generating structured movie recommendation follow-up questions." },
+                { role: "user", content: prompt }
+            ],
+            response_format: {
+                type: "json_schema",
+                json_schema: {
+                    name: "followup_question_schema",
+                    schema: {
+                        type: "object",
+                        properties: {
+                            state: {
+                                type: "array",
+                                items: { type: "number" },
+                                description: "Interaction state [CONTINUE, SATISFIED, STOP]"
+                            },
+                            question: {
+                                type: "string",
+                                description: "Follow-up question to probe user preferences"
+                            },
+                            reasoning: {
+                                type: "string",
+                                description: "Reasoning behind the follow-up question"
+                            }
                         },
-                        question: {
-                            type: "string",
-                            description: "Follow-up question to probe user preferences"
-                        },
-                        reasoning: {
-                            type: "string",
-                            description: "Reasoning behind the follow-up question"
-                        }
-                    },
-                    required: ["state", "question"],
-                    additionalProperties: false
+                        required: ["state", "question"],
+                        additionalProperties: false
+                    }
                 }
-            }
-        },
-        temperature: 0.7,
-        store: true
-    });
+            },
+            temperature: 0.7,
+            store: true
+        });
 
-    return JSON.parse(completion.choices[0].message.content);
+        return JSON.parse(completion.choices[0].message.content);
+    } catch (error) {
+        console.error('Error fetching follow-up question:', error);
+        throw new Error('Failed to fetch follow-up question');
+    }
 }
 
 const createPrompt = (context) => {
