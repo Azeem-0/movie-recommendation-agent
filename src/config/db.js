@@ -1,6 +1,7 @@
-const mongoose = require("mongoose");
-require("dotenv").config();
-const logger = require("../utils/logger");
+import dotenv from "dotenv";
+dotenv.config();
+import mongoose from "mongoose";
+import logger from "../utils/logger.js";
 
 
 const connectDB = async () => {
@@ -8,7 +9,6 @@ const connectDB = async () => {
     if (!process.env.MONGO_URI) {
         throw new Error("MONGO_URI is not defined in environment variables");
     }
-
 
     try {
         const conn = await mongoose.connect(process.env.MONGO_URI);
@@ -23,7 +23,6 @@ const connectDB = async () => {
             logger.info('Reconnected to MongoDB');
         });
 
-        // Graceful shutdown handling
         process.on('SIGINT', async () => {
             await conn.connection.close();
             logger.info('MongoDB connection closed through app termination');
@@ -47,4 +46,4 @@ const connectDB = async () => {
     }
 };
 
-module.exports = connectDB;
+export default connectDB;
