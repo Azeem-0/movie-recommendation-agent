@@ -5,6 +5,7 @@ dotenv.config();
 import { getPromptStartSearch } from '../utils/queryPrompts.js';
 import { handleMovieSearch } from '../controllers/movieController.js';
 import { handleError, handleMenuError } from '../middlewares/errorHandler.js';
+import mongoose from 'mongoose';
 
 (async () => {
     try {
@@ -12,6 +13,8 @@ import { handleError, handleMenuError } from '../middlewares/errorHandler.js';
         await mainMenu();
     } catch (error) {
         handleError(error, "init");
+    } finally {
+        await mongoose.connection.close();
     }
 })();
 
@@ -27,6 +30,7 @@ const mainMenu = async () => {
 
         const collection = await getChromaCollection();
         await handleMovieSearch(collection);
+
     } catch (error) {
         await handleMenuError(error);
     }
