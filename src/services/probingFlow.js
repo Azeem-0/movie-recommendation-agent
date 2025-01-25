@@ -105,23 +105,11 @@ async function generateFollowUpQuestion(context) {
         });
 
         const response = JSON.parse(completion.choices[0].message.content);
-        console.log(response);
-
         return response;
     } catch (error) {
         console.error('Error generating follow-up question:', error);
         return 'Sorry, I couldn\'t understand that. Can you clarify?';
     }
 }
-
-
-
-
-// const userInput = "It's enough, i don't want to use anything right now.";
-// generateFollowUpQuestion(userInput)
-//     .then(followUpQuestion => {
-//         console.log("User Input: ", userInput);
-//         console.log("Follow-up question: ", followUpQuestion);
-//     });
 
 export default generateFollowUpQuestion;

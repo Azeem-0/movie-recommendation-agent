@@ -34,6 +34,7 @@ dotenv.config();
                 let resolved = false;
                 let context = [];
                 let initialQuery;
+                let suggestedMovies = [];
                 let contextQuery;
 
                 for (let i = 0; i <= 5; i++) {
@@ -92,6 +93,8 @@ dotenv.config();
                         };
                     });
 
+                    suggestedMovies.push(JSON.stringify(formattedResults, null, 2));
+
                     console.log("Formatted Results:", JSON.stringify(formattedResults, null, 2));
 
                     context.push(`Query : ${contextQuery} || Response : ${formattedResults.map(result => result.title)}`);
@@ -108,114 +111,7 @@ dotenv.config();
                     }
                 }
 
-                await saveLogsToDatabase(initialQuery, resolved, context);
-
-
-
-                // const { query } = await inquirer.prompt([{
-                //     type: "input",
-                //     name: "query",
-                //     message: "What kind of movie are you looking for?",
-                //     validate: (input) => {
-                //         if (input.trim() === "") {
-                //             return "Please enter a valid query.";
-                //         }
-                //         if (input.length > 100) {
-                //             return "Query is too long. Please keep it under 100 characters.";
-                //         }
-                //         return true;
-                //     }
-                // }]);
-
-                // logger.info(`User searching for: ${query}`);
-
-
-
-                // const userEmbeddings = (await embedder.embedContent(query)).embedding.values;
-
-                // let suggestedMovies = [];
-                // let resolved = false;
-                // let context = [];
-
-                // try {
-                // const results = await collection.query({
-                //     nResults: 3,
-                //     queryEmbeddings: [userEmbeddings]
-                // });
-
-                // const formattedResults = results.ids[0].map((id, index) => {
-                //     return {
-                //         title: id,
-                //         description: results.documents[0][index],
-                //         metadata: results.metadatas[0][index],
-                //         distance: results.distances[0][index]
-                //     };
-                // });
-
-                // console.log("Formatted Results:", JSON.stringify(formattedResults, null, 2));
-
-                // context.push(`Query : ${query} || Response : ${formattedResults.map(result => result.title)}`);
-
-                // const { satisfied } = await inquirer.prompt([{
-                //     type: "confirm",
-                //     name: "satisfied",
-                //     message: "Are you satisfied with these movie suggestions?",
-                //     default: false
-                // }]);
-
-                // let contextEmbeddings;
-
-                // if (suggestedMovies.length === 0 || !satisfied) {
-
-                //     for (let i = 0; i < 5; i++) {
-
-                //         const followUpQuestion = await generateFollowUpQuestion(context.join('\n'));
-
-                //         if (followUpQuestion.state[1] || followUpQuestion.state[2]) {
-                //             resolved = followUpQuestion.state[1] ? true : false;
-                //             break;
-                //         }
-
-                //         const { answer } = await inquirer.prompt([{
-                //             type: "input",
-                //             name: "answer",
-                //             message: followUpQuestion,
-                //             validate: (input) => input.trim() !== "" ? true : "Please provide an answer."
-                //         }]);
-
-                //         context.push(`Follow-up Question: ${followUpQuestion} - User Answer: ${answer}`);
-
-
-                //         contextEmbeddings = (await embedder.embedContent(context.join('\n'))).embedding.values;
-
-                //         const results = await collection.query({
-                //             nResults: 3,
-                //             queryEmbeddings: [contextEmbeddings]
-                //         });
-
-                //         const formattedResults = results.ids[0].map((id, index) => {
-                //             return {
-                //                 title: id,
-                //                 description: results.documents[0][index],
-                //                 metadata: results.metadatas[0][index],
-                //                 distance: results.distances[0][index]
-                //             };
-                //         });
-
-                //         console.log("Formatted Results:", JSON.stringify(formattedResults, null, 2));
-
-                //         context.push(`Query : ${query} || Response : ${formattedResults.map(result => result.title)}`);
-                //     }
-                // }
-                // else {
-                //     resolved = true;
-                // }
-
-
-                // } catch (error) {
-                //     console.error("Error querying collection:", error);
-                // }
-
+                await saveLogsToDatabase(initialQuery, suggestedMovies, resolved, context);
             } catch (error) {
                 console.error("\nAn error occurred:", error.message);
                 logger.error("Main menu error", { error });

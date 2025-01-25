@@ -1,13 +1,12 @@
 import Log from '../models/logs.js';
 
-const saveLogsToDatabase = async (query, resolved, context, suggestedMovies, probingQueryResponse) => {
+const saveLogsToDatabase = async (query, suggestedMovies, resolved, context) => {
     try {
         const logData = {
             query,
+            suggestedMovies,
             resolved,
             context,
-            suggestedMovies,
-            probingQueryResponse
         };
         const newLog = new Log(logData);
         await newLog.save();

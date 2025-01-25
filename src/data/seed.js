@@ -1,12 +1,9 @@
-import connectDB from "../config/db.js";
 import Movie from "../models/movie.js";
 import getChromaCollection from "../config/vectorDb.js";
 import embedder from "../utils/embedder.js";
 import movies from "./moviesData.js";
 
 const seedMovies = async () => {
-    await connectDB();
-
     try {
         await Movie.deleteMany();
         await Movie.insertMany(movies);
