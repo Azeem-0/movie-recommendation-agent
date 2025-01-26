@@ -1,4 +1,4 @@
-import getChromaCollection from '../config/vectorDb.js';
+import getChromaCollection from '../config/chromaDb.js';
 import connectDB from '../config/mongoDb.js';
 import dotenv from "dotenv";
 dotenv.config();

@@ -1,3 +1,9 @@
+/**
+ * This module contains all the prompt messages and user interaction functions
+ * used throughout the application. It uses the inquirer library to handle
+ * command-line prompts and user input validation.
+ */
+
 import inquirer from "inquirer";
 import { MAX_QUERY_LENGTH } from "../config/constants.js";
 
