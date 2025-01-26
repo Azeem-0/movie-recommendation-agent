@@ -1,4 +1,4 @@
-import getChromaCollection from "../config/vectorDb.js";
+import getChromaCollection from "../config/chromaDb.js";
 import embedder from "../utils/embedder.js";
 import movies from "./moviesData.js";
 
@@ -7,6 +7,7 @@ const seedMovies = async () => {
         const collection = await getChromaCollection();
 
         const ids = movies.map(movie => movie.title);
+        // Create embeddings from movie details - this combines multiple fields for better semantic matching
         const embeddings = await Promise.all(movies.map(movie => embedder.embedContent(`${movie.title} ${movie.genre.join(", ")} ${movie.description} ${movie.year} ${movie.rating}`)));
         const documents = movies.map(movie => `${movie.title} ${movie.genre.join(", ")} ${movie.description}`);
         const metadatas = movies.map(movie => movie);

@@ -13,11 +13,16 @@ const handleMovieSearch = async (collection) => {
     for (let i = 0; i <= MAX_LOOP_ITERATIONS; i++) {
         let queryParams;
         let userResponse;
+
+        // This prompts the user with a basic question about what kind of movie they're looking for
         if (i === 0) {
             initialQuery = await getUserQuery();
             queryParams = userResponse = initialQuery;
         } else {
             const followUpQuestion = await generateFollowUpQuestion(context.join('\n'));
+
+            // If the user's responses indicate they want to stop the conversation or have found a satisfactory movie,
+            // the AI model will set appropriate state flags to end the search process
             if (followUpQuestion.state[1] || followUpQuestion.state[2]) {
                 resolved = followUpQuestion.state[1] ? true : false;
                 break;
@@ -50,6 +55,7 @@ const queryMovies = async (collection, userEmbeddings) => {
         queryEmbeddings: [userEmbeddings]
     });
 
+    // Formatting the response after the vector search to return an array of movie objects
     return results.ids[0].map((id, index) => ({
         title: id,
         metadata: results.metadatas[0][index],
