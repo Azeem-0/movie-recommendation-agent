@@ -72,7 +72,9 @@ const createPrompt = (context) => {
             Generate a follow-up question that:
             - Deeply probes user movie preferences
             - Uses minimal, targeted questions
-            - Provides clear interaction state
+            - Provides clear interaction state 
+            - Also provide the preferences of the user in the preference field as specified.
+
 
             Preference Exploration Dimensions:
             1. Genre specifics
@@ -86,11 +88,13 @@ const createPrompt = (context) => {
                 "state": [boolean, boolean, boolean],
                 "question": "string | undefined", 
                 "reasoning": "string | undefined",
+                "preferences":"stirng | undefined",
 
                 Example: {
                     "state": [1, 0, 0],
                     "question": "What type of movie do you prefer?",
-                    "reasoning": "Gathering more context"
+                    "reasoning": "Gathering more context",
+                    "preferences" : ["likes english movies","loves action films"]
                 }
             }
 

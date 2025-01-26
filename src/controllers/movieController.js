@@ -9,6 +9,7 @@ const handleMovieSearch = async (collection) => {
     let context = [];
     let initialQuery;
     let suggestedMovies = [];
+    let preferences = [];
 
     for (let i = 0; i <= MAX_LOOP_ITERATIONS; i++) {
         let queryParams;
@@ -27,6 +28,9 @@ const handleMovieSearch = async (collection) => {
                 resolved = followUpQuestion.state[1] ? true : false;
                 break;
             }
+
+            preferences.push(followUpQuestion.preferences);
+
             userResponse = await getUserFollowUpAnswer(followUpQuestion.question);
             queryParams = followUpQuestion + userResponse + context.slice(-2).join("\n");
         }
@@ -46,7 +50,7 @@ const handleMovieSearch = async (collection) => {
         }
     }
 
-    await saveLogsToDatabase(initialQuery, [...new Set(suggestedMovies)], resolved, context);
+    await saveLogsToDatabase(initialQuery, [...new Set(suggestedMovies)], resolved, context, preferences);
 };
 
 const queryMovies = async (collection, userEmbeddings) => {
